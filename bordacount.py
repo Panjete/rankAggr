@@ -21,10 +21,10 @@ sorted_keys = sorted(dictionary.keys())
 
 def borda(listOfDocs):
     for docid, rel_label, ranks in listOfDocs:
-        doc_score = 0.0
+        doc_score = 0
         for ranking_mechanism in ranks.keys():
             if ranks[ranking_mechanism]!= -1:
-                doc_score += (1/ (k + ranks[ranking_mechanism]))
+                doc_score -= ranks[ranking_mechanism] ## The bigger the absolute number, the worse -> Need to improve this!!
         scores[docid] = doc_score
     return sorted(scores.items(), key=lambda x: x[1], reverse=True)
 
