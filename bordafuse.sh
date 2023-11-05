@@ -7,4 +7,4 @@ while [ "$1" != "" ]; do
     shift
 done
 python bordafuse.py "${args[@]}"
-echo "Shell script successfully terminated!
+echo "Shell script successfully terminated!"
