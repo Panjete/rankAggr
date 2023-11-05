@@ -1,5 +1,13 @@
 #!/bin/bash
 
+
+
+./rrf.sh MQ2008-agg/agg.txt trec_eval-9.0.7/rrf.txt 
+./bordacount.sh MQ2008-agg/agg.txt trec_eval-9.0.7/bordacount.txt 
+./condorcet.sh MQ2008-agg/agg.txt trec_eval-9.0.7/condorcet.txt 
+./bayesfuse.sh MQ2008-agg/agg.txt trec_eval-9.0.7/bayesfuse.txt 
+./weightedbordafuse.sh MQ2008-agg/agg.txt trec_eval-9.0.7/weightedbordafuse.txt 
+
 cd trec_eval-9.0.7
 make
 echo "RRF accuracies"
