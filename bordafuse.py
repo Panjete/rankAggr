@@ -17,42 +17,83 @@ k = 60
 
 
 
-rel_docs_counted = dict([(i, 0) for i in range(1, 26)])
+# rel_docs_counted = dict([(i, 0) for i in range(1, 26)]) ## Contains the number of relevant documents retrieved by this system
+# ## The more relevant nodes a system retrieves, the more reliable it is 
+# for qid in dictionary.keys():
+#     for _, rel_label, ranks in dictionary[qid]:
+#         if rel_label>0:
+#             for key in ranks.keys():
+#                 if ranks[key]!=-1:
+#                     rel_docs_counted[key] += 1
 
-for qid in dictionary.keys():
-    for docid, rel_label, ranks in dictionary[qid]:
-        if rel_label>0:
-            for key in ranks.keys():
-                if ranks[key]!=-1:
-                    rel_docs_counted[key] += 1
+# weights_ranks = {}
+# total_rel_documents = 0
+# for rs in range(1, 26):
+#     total_rel_documents += rel_docs_counted[rs]
+# for rs in range(1, 26):
+#     weights_ranks[rs] = rel_docs_counted[rs]/total_rel_documents
 
-weights_ranks = {}
-total_rel_documents = 0
-for rs in range(1, 26):
-    total_rel_documents += rel_docs_counted[rs]
-for rs in range(1, 26):
-    weights_ranks[rs] = rel_docs_counted[rs]/total_rel_documents
+def get_stats_file(filename):
+    dictionary_f = reader(filename)
+    rel_docs_counted = dict([(i, 0) for i in range(1, 26)]) ## Contains the number of relevant documents retrieved by this system
+    for qid in dictionary_f.keys():
+        for _, rel_label, ranks in dictionary_f[qid]:
+            if rel_label>0:
+                for key in ranks.keys():
+                    if ranks[key]!=-1:
+                        rel_docs_counted[key] += 1
+
+    return rel_docs_counted
+
+def get_weights(filenames):
+    rel_docs_total = dict([(i, 0) for i in range(1, 26)])
+    for file in filenames:
+        local_stats = get_stats_file(file)
+        for j in range(1, 26):
+            rel_docs_total[j] += local_stats[j]
+
+    total_rel_documents = 0
+    for rs in range(1, 26):
+        total_rel_documents += rel_docs_total[rs]
+
+    weights_ranks = {}
+    for rs in range(1, 26):
+        weights_ranks[rs] = rel_docs_total[rs]/total_rel_documents
+
+    return weights_ranks
+
+filenames = ["MQ2008-agg/agg.txt", 
+                        "MQ2008-agg/Fold1/test.txt", "MQ2008-agg/Fold1/train.txt", "MQ2008-agg/Fold1/vali.txt",
+                        "MQ2008-agg/Fold2/test.txt", "MQ2008-agg/Fold2/train.txt", "MQ2008-agg/Fold2/vali.txt",
+                        "MQ2008-agg/Fold3/test.txt", "MQ2008-agg/Fold3/train.txt", "MQ2008-agg/Fold3/vali.txt",
+                        "MQ2008-agg/Fold4/test.txt", "MQ2008-agg/Fold4/train.txt", "MQ2008-agg/Fold4/vali.txt",
+                        "MQ2008-agg/Fold5/test.txt", "MQ2008-agg/Fold5/train.txt", "MQ2008-agg/Fold5/vali.txt"]
+
+global_weights = get_weights(filenames)
 
 sorted_keys = sorted(dictionary.keys())
 
-def borda(listOfDocs):
-    for docid, rel_label, ranks in listOfDocs:
+def weightedborda(listOfDocs):
+    for docid, _, ranks in listOfDocs:
         doc_score = 0
         for ranking_mechanism in ranks.keys():
             if ranks[ranking_mechanism]!= -1:
-                doc_score -= weights_ranks[ranking_mechanism] * ranks[ranking_mechanism] ## The bigger the absolute number, the worse -> Need to improve this!!
+                doc_score -= global_weights[ranking_mechanism] * ranks[ranking_mechanism] ## The bigger the absolute number, the worse -> Need to improve this!!
             else :
-                doc_score -= weights_ranks[ranking_mechanism] * 1000
+                doc_score -= global_weights[ranking_mechanism] * 1000
         scores[docid] = doc_score
     return sorted(scores.items(), key=lambda x: x[1], reverse=True)
 
 with open(output_file, 'w') as wf:
     for qid in sorted_keys:
         scores = {} # For all the documents in this qid, will contain scores
-        ordered_scores = borda(dictionary[qid])
+        ordered_scores = weightedborda(dictionary[qid])
         aggrank = 1
         for aggid, aggscore in ordered_scores:
             wf.write(str(qid) + " Q0 " + aggid + " " + str(aggrank) + " " + str(aggscore) + " gsp1\n")
             aggrank += 1
 
 print("All done!")
+
+
+    
