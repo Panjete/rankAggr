@@ -4,8 +4,19 @@
 2. Are all 25(X) always mentioned?
 3. Print in output file in increading order of query id?
 
-4. RRF- Currently not counting un-occured results at all.
-5. 
+4. RRF- Currently not counting un-occured results at all, counting as rank 1000 gives decreased perf
+5. Ranks - Better Document when higher rank or lower?
+
+6. Check Ranking for all models
+
+7. For bayesfuse, probability of falling in a region == (probability rank = r) ? Wouldn't make a difference, gets cancelled!
+
+8. Condorcet all perfect, except ranking desc or asc. Also adding if exists in D1 but not in D2, D1 better! Significantly imporved
+
+9. Bordacount - gave a-ve reward even for documents not labelled at all
+
+
+
 
 
 

@@ -29,6 +29,10 @@ def simple_majority_runoff(ranks_d1, ranks_d2):
                     count += 1 #D1 is ranked higher
                 else:
                     count -= 1
+            elif ranks_d1[key]!= -1:
+                count += 1 #D1 is ranked better
+            elif ranks_d2[key] != -1:
+                count -= 1 # D2 is ranked better
 
     if count > 0:
         return True ## D1 better than D2

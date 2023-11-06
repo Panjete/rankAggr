@@ -20,6 +20,7 @@ dictionary = reader(collection_file)
 #print(dictionary[10002])
 
 k = 60 ### Hyper-parameter
+not_found_doc_rank = 1000#1000 ### Hyper-parameter
 
 sorted_keys = sorted(dictionary.keys())
 
@@ -29,6 +30,8 @@ def rrf_rank_aggr(listOfDocs):
         for ranking_mechanism in ranks.keys():
             if ranks[ranking_mechanism]!= -1:
                 doc_score += (1/ (k + ranks[ranking_mechanism]))
+            else:
+                doc_score += (1/ (k + not_found_doc_rank))
         scores[docid] = doc_score
     return sorted(scores.items(), key=lambda x: x[1], reverse=True)
 

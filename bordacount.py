@@ -25,6 +25,8 @@ def borda(listOfDocs):
         for ranking_mechanism in ranks.keys():
             if ranks[ranking_mechanism]!= -1:
                 doc_score -= ranks[ranking_mechanism] ## The bigger the absolute number, the worse -> Need to improve this!!
+            else :
+                doc_score -= 1000
         scores[docid] = doc_score
     return sorted(scores.items(), key=lambda x: x[1], reverse=True)
 
