@@ -14,9 +14,24 @@ dictionary = reader(collection_file)
 
 k = 60
 
-weights_rankers = dict([(i, 1) for i in range(1, 26)])
 
 
+
+rel_docs_counted = dict([(i, 0) for i in range(1, 26)])
+
+for qid in dictionary.keys():
+    for docid, rel_label, ranks in dictionary[qid]:
+        if rel_label>0:
+            for key in ranks.keys():
+                if ranks[key]!=-1:
+                    rel_docs_counted[key] += 1
+
+weights_ranks = {}
+total_rel_documents = 0
+for rs in range(1, 26):
+    total_rel_documents += rel_docs_counted[rs]
+for rs in range(1, 26):
+    weights_ranks[rs] = rel_docs_counted[rs]/total_rel_documents
 
 sorted_keys = sorted(dictionary.keys())
 
@@ -25,9 +40,9 @@ def borda(listOfDocs):
         doc_score = 0
         for ranking_mechanism in ranks.keys():
             if ranks[ranking_mechanism]!= -1:
-                doc_score -= weights_rankers[ranking_mechanism] * ranks[ranking_mechanism] ## The bigger the absolute number, the worse -> Need to improve this!!
+                doc_score -= weights_ranks[ranking_mechanism] * ranks[ranking_mechanism] ## The bigger the absolute number, the worse -> Need to improve this!!
             else :
-                doc_score -= weights_rankers[ranking_mechanism] * 1000
+                doc_score -= weights_ranks[ranking_mechanism] * 1000
         scores[docid] = doc_score
     return sorted(scores.items(), key=lambda x: x[1], reverse=True)
 
