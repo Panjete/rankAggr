@@ -30,8 +30,8 @@ def rrf_rank_aggr(listOfDocs):
         for ranking_mechanism in ranks.keys():
             if ranks[ranking_mechanism]!= -1:
                 doc_score += (1/ (k + ranks[ranking_mechanism]))
-            else:
-                doc_score += (1/ (k + not_found_doc_rank))
+            # else: ### After Analysis, found that best results when not included at all
+            #     doc_score += (1/ (k + not_found_doc_rank))
         scores[docid] = doc_score
     return sorted(scores.items(), key=lambda x: x[1], reverse=True)
 

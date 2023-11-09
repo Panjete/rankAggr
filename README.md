@@ -22,3 +22,8 @@
 
 ./getscores.sh -> to get eval results
 ./[algorithm].sh -> to generate relevant file (currently gets stored in trec_eval/)
+
+> RRF on no-retrieve -> 0.4772
+> RRF on no-retrieve = 1000 -> 0.4768
+> RRF on no-retrieve = 500 -> 0.4757
+> RRF on no-retrieve = 100 -> 0.4502
