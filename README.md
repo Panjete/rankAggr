@@ -10,7 +10,13 @@
 * `bash getscores.sh` -> to get trec_eval results (read script for I/O compatibilty)
 * `python getqrels.py` -> to obtain a qrels file to trec_eval computation from `[collection-file]`
 
+## REFERENCES
 
+[1] Javed A. Aslam and Mark H. Montague. Models for metasearch. In SIGIR, 2001. URL: https://www. khoury.northeastern.edu/home/jaa/CSG339.06F/resources/borda_metas.pdf.
+
+[2] GordonV.Cormack, CharlesL.A.Clarke, andStefan Buttcher. Reciprocal rank fusion outperforms condorcet and individual rank learning methods. Proceedings of the 32nd international ACM SIGIR conference on Research and development in information retrieval, 2009. URL: https://api.semanticscholar.org/CorpusID: 12408211.
+
+[3] Mark H. Montague and Javed A. Aslam. Condorcet fusion for improved retrieval. In International Con- ference on Information and Knowledge Management, 2002. URL: https://api.semanticscholar.org/ CorpusID:5201014.
 
 ## RESULTS 
 
