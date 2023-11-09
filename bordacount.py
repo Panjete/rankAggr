@@ -16,7 +16,7 @@ dictionary = reader(collection_file)
 sorted_keys = sorted(dictionary.keys())
 
 def borda(listOfDocs):
-    ranks_per_ranker = dict([(rs,{}) for rs in range(1, 26)]) ## Approach 2
+    ranks_per_ranker = dict([(rs,{}) for rs in range(1, 26)]) ## Approach 1
 
     for docid, _, ranks in listOfDocs:
         doc_score = 0
@@ -26,7 +26,7 @@ def borda(listOfDocs):
                 doc_score -= ranks[ranking_mechanism] ## The bigger the absolute number, the worse 
                 ## Assuming every ranker has the same total retrieved documents (say 1000), scores will be 
                 ## sum (1000 - rank_retrieved) -> we can simply ignore the 1000 for all, and assume that non-retrieved docs occur at 1000
-                ranks_per_ranker[ranking_mechanism][ranks[ranking_mechanism]] = docid ## Approach 2
+                ranks_per_ranker[ranking_mechanism][ranks[ranking_mechanism]] = docid ## Approach 1
             else :
                 doc_score -= 1000
         scores[docid] = doc_score
@@ -40,7 +40,7 @@ def borda(listOfDocs):
             else:
                 bscores[ranks_per_ranker[rs][key]] = j
             j += 1
-    return sorted(scores.items(), key=lambda x: x[1], reverse=True) ## use bscores for approach 2, scores for approach 1
+    return sorted(scores.items(), key=lambda x: x[1], reverse=True) ## use bscores for approach 1, scores for approach 2
 
 with open(output_file, 'w') as wf:
     for qid in sorted_keys:

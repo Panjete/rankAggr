@@ -14,59 +14,52 @@ collection_file = "MQ2008-agg/agg.txt"
 output_file = "trec_eval-9.0.7/bayesfuse.txt"
 
 dictionary = reader(collection_file)
-# dicttionary[queryID] -> list of (Document_id, relevance_label, rankings)
+# dictionary[queryID] -> list of (Document_id, relevance_label, rankings)
 # where, rankings is a dictionary (RankingMechanism -> RankGiven) with RankGiven = -1
 # if the RankingMechanism does not enlist this document
 
-#print(dictionary[10002])
-
-k = 60 ### Hyper-parameter
-
-ranges = [(1, 5), (6, 10), (11, 15), (16, 20), (21, 30), (31, 100), (101, 200), (201, 500), (501, 1000), (1001, 100_000)]
+## p(rank | relevance) computation is broken into it belonging to one of these buckets
+## also, dividing by bucket size is not necesaary, gets cancelled in numerator/denominator computation anyways
+#ranges = [(1, 5), (6, 10), (11, 15), (16, 20), (21, 30), (31, 100), (101, 200), (201, 500), (501, 1000), (1001, 1000_000)]
+ranges = [(1, 5), (6, 10), (11, 15), (16, 20), (21, 30), (31, 50), (51, 75), (76, 100),
+            (101, 125), (126, 150), (151, 175), (176, 200), (201, 225), (226, 250),
+              (251, 275),(276, 300), (301, 325), (326, 350), (351, 375), (376, 400),
+              (401, 425), (426, 450), (451, 475), (476, 500), (501, 525), (526, 550), (551, 600),
+                (601, 650), (651, 700), (701, 750), (751, 800), (801, 900), (901, 1000), (1001, 1000_000)]
 n_ranges = len(ranges)
-len_ranges = {0: 5, 1: 5, 2: 5, 3: 5, 4: 10, 5: 70, 6:100, 7:300, 8: 500, 9: 1000}
 
+# Computes which range the document rank lies in
 def index_num(i):
-    if i >= 1 and i <= 5:
-        return 0
-    if i >= 6 and i <= 10:
-        return 1
-    if i >= 11 and i <= 15:
-        return 2
-    if i >= 16 and i <= 20:
-        return 3
-    if i >= 21 and i <= 30:
-        return 4
-    if i >= 31 and i <= 100:
-        return 5
-    if i >= 101 and i <= 200:
-        return 6
-    if i >= 201 and i <= 500:
-        return 7
-    if i >= 501 and i <= 1000:
-        return 8
-    else:
-        return 9
+    j = 0
+    if i < 1 or i > ranges[-1][1]:
+        return len(ranges) -1
+    for left, right in ranges:
+        if i >= left and i <= right:
+            return j
+        else:
+            j += 1
         
+## Returns p(rank = r| relevant) and p(rank = r| irrelevant)
 def prob_distbn(dictionary):
-    ranking_systems_rel = {}
-    ranking_systems_irrel = {}
+    ranking_systems_rel = dict([(rs, []) for rs in range(1, 26)]) ## Contains all relevant documents' ranks retrieved by rs
+    ranking_systems_irrel = dict([(rs, []) for rs in range(1, 26)]) ## Contains all irrelevant documents' ranks ranks retrieved by rs
     for qid in dictionary.keys():
         for _, rel_label, ranks in dictionary[qid]:
             if rel_label > 0: # consider only relevant ones
                 for rs in ranks.keys(): ## For this document, append ranks to the relevant ranking system
                     if ranks[rs] != -1:
-                        if rs in ranking_systems_rel:
-                            ranking_systems_rel[rs].append(ranks[rs])
-                        else:
-                            ranking_systems_rel[rs] = [ranks[rs]]
+                        ranking_systems_rel[rs].append(ranks[rs])
+                    else:
+                        ranking_systems_rel[rs].append(1001)
+                        
             else: ## considering irrelevant ones!
                 for rs in ranks.keys(): ## For this document, append ranks to the irrelevant ranking system
-                    if ranks[rs] != -1:
-                        if rs in ranking_systems_irrel:
-                            ranking_systems_irrel[rs].append(ranks[rs])
-                        else:
-                            ranking_systems_irrel[rs] = [ranks[rs]]
+                    if ranks[rs] == -1:
+                        ranking_systems_irrel[rs].append(ranks[rs])
+                    else:
+                        ranking_systems_irrel[rs].append(1001)
+                        
+                        
 
     for rs in ranking_systems_rel.keys():
         ranking_systems_rel[rs] = sorted(ranking_systems_rel[rs])

@@ -19,7 +19,7 @@ dictionary = reader(collection_file)
 
 #print(dictionary[10002])
 
-k = 60 ### Hyper-parameter
+k = 300 ### Hyper-parameter
 not_found_doc_rank = 100 ### Hyper-parameter, unused by experimental results
 
 sorted_keys = sorted(dictionary.keys())
