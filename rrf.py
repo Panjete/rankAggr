@@ -9,18 +9,14 @@ args = aparser.parse_args()
 collection_file = args.collection_file[0]
 output_file = args.output_file[0]
 
-# collection_file = "MQ2008-agg/agg.txt"
-# output_file = "trec_eval-9.0.7/rrf.txt"
 
 dictionary = reader(collection_file)
 # dicttionary[queryID] -> list of (Document_id, relevance_label, rankings)
 # where, rankings is a dictionary (RankingMechanism -> RankGiven) with RankGiven = -1
 # if the RankingMechanism does not enlist this document
 
-#print(dictionary[10002])
-
 k = 300 ### Hyper-parameter
-not_found_doc_rank = 100 ### Hyper-parameter, unused by experimental results
+not_found_doc_rank = 1000 ### Hyper-parameter, unused by experimental results
 
 sorted_keys = sorted(dictionary.keys())
 

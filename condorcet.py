@@ -14,10 +14,6 @@ dictionary = reader(collection_file)
 # where, rankings is a dictionary (RankingMechanism -> RankGiven) with RankGiven = -1
 # if the RankingMechanism does not enlist this document
 
-#print(dictionary[10002])
-
-k = 60 ### Hyper-parameter
-
 sorted_keys = sorted(dictionary.keys())
 
 

@@ -10,9 +10,6 @@ args = aparser.parse_args()
 collection_file = args.collection_file[0]
 output_file = args.output_file[0]
 
-collection_file = "MQ2008-agg/agg.txt"
-output_file = "trec_eval-9.0.7/bayesfuse.txt"
-
 dictionary = reader(collection_file)
 # dictionary[queryID] -> list of (Document_id, relevance_label, rankings)
 # where, rankings is a dictionary (RankingMechanism -> RankGiven) with RankGiven = -1
@@ -110,10 +107,10 @@ def bayesfusescore(listOfDocs):
                 prob_of_being_rel_in_this_range = prob_dist_rel[ranking_mechanism][index_of_range]
                 prob_of_being_irrel_in_this_range = prob_dist_irrel[ranking_mechanism][index_of_range]
                 doc_score += log(prob_of_being_rel_in_this_range/prob_of_being_irrel_in_this_range)
-            else:
-                prob_of_being_rel_in_this_range = prob_dist_rel[ranking_mechanism][n_ranges-1]
-                prob_of_being_irrel_in_this_range = prob_dist_irrel[ranking_mechanism][n_ranges-1]
-                doc_score += log(prob_of_being_rel_in_this_range/prob_of_being_irrel_in_this_range)
+            # else: ## Analytically the best choice
+            #     prob_of_being_rel_in_this_range = prob_dist_rel[ranking_mechanism][n_ranges-1]
+            #     prob_of_being_irrel_in_this_range = prob_dist_irrel[ranking_mechanism][n_ranges-1]
+            #     doc_score += log(prob_of_being_rel_in_this_range/prob_of_being_irrel_in_this_range)
         scores[docid] = doc_score
     return sorted(scores.items(), key=lambda x: x[1], reverse=True)
 

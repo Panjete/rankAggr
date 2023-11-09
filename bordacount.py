@@ -9,9 +9,6 @@ args = aparser.parse_args()
 collection_file = args.collection_file[0]
 output_file = args.output_file[0]
 
-collection_file = "MQ2008-agg/agg.txt"
-output_file = "trec_eval-9.0.7/bordacount.txt"
-
 dictionary = reader(collection_file)
 sorted_keys = sorted(dictionary.keys())
 

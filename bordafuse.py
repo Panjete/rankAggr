@@ -12,28 +12,6 @@ collection_file = args.collection_file[0]
 output_file = args.output_file[0]
 
 dictionary = reader(collection_file)
-#print(dictionary[10002])
-
-k = 60
-
-
-
-
-# rel_docs_counted = dict([(i, 0) for i in range(1, 26)]) ## Contains the number of relevant documents retrieved by this system
-# ## The more relevant nodes a system retrieves, the more reliable it is 
-# for qid in dictionary.keys():
-#     for _, rel_label, ranks in dictionary[qid]:
-#         if rel_label>0:
-#             for key in ranks.keys():
-#                 if ranks[key]!=-1:
-#                     rel_docs_counted[key] += 1
-
-# weights_ranks = {}
-# total_rel_documents = 0
-# for rs in range(1, 26):
-#     total_rel_documents += rel_docs_counted[rs]
-# for rs in range(1, 26):
-#     weights_ranks[rs] = rel_docs_counted[rs]/total_rel_documents
 
 
 ## For a file, returns dictionary ranker -> total relevant documents retrieved by the ranker
@@ -45,7 +23,7 @@ def get_stats_file(filename):
             if rel_label>0:
                 for key in ranks.keys():
                     if ranks[key]!=-1:
-                        rel_docs_counted[key] += rel_label * ranks[key] ## without multiplication -> 0.4855, now 0.4866
+                        rel_docs_counted[key] += rel_label * ranks[key] ## without multiplication -> 0.4855
                     else:
                         rel_docs_counted[key] -= 0.1 * ranks[key]
 
@@ -77,12 +55,12 @@ def get_weights(filenames):
 
     return weights_ranks
 
-filenames = ["MQ2008-agg/agg.txt",
-                         "MQ2008-agg/Fold1/test.txt", "MQ2008-agg/Fold1/train.txt", "MQ2008-agg/Fold1/vali.txt",
-                         "MQ2008-agg/Fold2/test.txt", "MQ2008-agg/Fold2/train.txt", "MQ2008-agg/Fold2/vali.txt",
-                         "MQ2008-agg/Fold3/test.txt", "MQ2008-agg/Fold3/train.txt", "MQ2008-agg/Fold3/vali.txt",
-                         "MQ2008-agg/Fold4/test.txt", "MQ2008-agg/Fold4/train.txt", "MQ2008-agg/Fold4/vali.txt",
-                         "MQ2008-agg/Fold5/test.txt", "MQ2008-agg/Fold5/train.txt", "MQ2008-agg/Fold5/vali.txt"
+filenames = [collection_file
+                        #  "MQ2008-agg/Fold1/test.txt", "MQ2008-agg/Fold1/train.txt", "MQ2008-agg/Fold1/vali.txt", Add no valuable contribution
+                        #  "MQ2008-agg/Fold2/test.txt", "MQ2008-agg/Fold2/train.txt", "MQ2008-agg/Fold2/vali.txt",
+                        #  "MQ2008-agg/Fold3/test.txt", "MQ2008-agg/Fold3/train.txt", "MQ2008-agg/Fold3/vali.txt",
+                        #  "MQ2008-agg/Fold4/test.txt", "MQ2008-agg/Fold4/train.txt", "MQ2008-agg/Fold4/vali.txt",
+                        #  "MQ2008-agg/Fold5/test.txt", "MQ2008-agg/Fold5/train.txt", "MQ2008-agg/Fold5/vali.txt"
                         ]
 
 global_weights = get_weights(filenames)
