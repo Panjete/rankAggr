@@ -20,6 +20,8 @@ k = 60 ### Hyper-parameter
 
 sorted_keys = sorted(dictionary.keys())
 
+
+### Algorithm 1 in the paper
 def simple_majority_runoff(ranks_d1, ranks_d2):
     count = 0
     for key in ranks_d1.keys():
@@ -38,6 +40,7 @@ def simple_majority_runoff(ranks_d1, ranks_d2):
         return True ## D1 better than D2
     return False
 
+### Basically a quicksort (descending order) over the list of documents
 def condorcetfuse(listOfDocs):
     n = len(listOfDocs)
     if n < 2:

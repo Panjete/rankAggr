@@ -20,12 +20,13 @@ dictionary = reader(collection_file)
 #print(dictionary[10002])
 
 k = 60 ### Hyper-parameter
-not_found_doc_rank = 1000#1000 ### Hyper-parameter
+not_found_doc_rank = 100 ### Hyper-parameter, unused by experimental results
 
 sorted_keys = sorted(dictionary.keys())
 
 def rrf_rank_aggr(listOfDocs):
-    for docid, rel_label, ranks in listOfDocs:
+    scores = {} # document -> score map
+    for docid, _, ranks in listOfDocs:
         doc_score = 0.0
         for ranking_mechanism in ranks.keys():
             if ranks[ranking_mechanism]!= -1:
@@ -33,7 +34,8 @@ def rrf_rank_aggr(listOfDocs):
             # else: ### After Analysis, found that best results when not included at all
             #     doc_score += (1/ (k + not_found_doc_rank))
         scores[docid] = doc_score
-    return sorted(scores.items(), key=lambda x: x[1], reverse=True)
+    new_sorted_list = sorted(scores.items(), key=lambda x: x[1], reverse=False)
+    return new_sorted_list
 
 with open(output_file, 'w') as wf:
     for qid in sorted_keys:

@@ -13,22 +13,34 @@ collection_file = "MQ2008-agg/agg.txt"
 output_file = "trec_eval-9.0.7/bordacount.txt"
 
 dictionary = reader(collection_file)
-#print(dictionary[10002])
-
-k = 60
-
 sorted_keys = sorted(dictionary.keys())
 
 def borda(listOfDocs):
-    for docid, rel_label, ranks in listOfDocs:
+    ranks_per_ranker = dict([(rs,{}) for rs in range(1, 26)]) ## Approach 2
+
+    for docid, _, ranks in listOfDocs:
         doc_score = 0
         for ranking_mechanism in ranks.keys():
+            ### Approach 1
             if ranks[ranking_mechanism]!= -1:
-                doc_score -= ranks[ranking_mechanism] ## The bigger the absolute number, the worse -> Need to improve this!!
+                doc_score -= ranks[ranking_mechanism] ## The bigger the absolute number, the worse 
+                ## Assuming every ranker has the same total retrieved documents (say 1000), scores will be 
+                ## sum (1000 - rank_retrieved) -> we can simply ignore the 1000 for all, and assume that non-retrieved docs occur at 1000
+                ranks_per_ranker[ranking_mechanism][ranks[ranking_mechanism]] = docid ## Approach 2
             else :
                 doc_score -= 1000
         scores[docid] = doc_score
-    return sorted(scores.items(), key=lambda x: x[1], reverse=True)
+    
+    bscores = {}
+    for rs in range(1, 26):
+        j = 1
+        for key in sorted(ranks_per_ranker[rs], reverse=True):
+            if key in bscores:
+                bscores[ranks_per_ranker[rs][key]] += j
+            else:
+                bscores[ranks_per_ranker[rs][key]] = j
+            j += 1
+    return sorted(scores.items(), key=lambda x: x[1], reverse=True) ## use bscores for approach 2, scores for approach 1
 
 with open(output_file, 'w') as wf:
     for qid in sorted_keys:

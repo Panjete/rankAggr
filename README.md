@@ -23,7 +23,14 @@
 ./getscores.sh -> to get eval results
 ./[algorithm].sh -> to generate relevant file (currently gets stored in trec_eval/)
 
-> RRF on no-retrieve -> 0.4772
-> RRF on no-retrieve = 1000 -> 0.4768
-> RRF on no-retrieve = 500 -> 0.4757
-> RRF on no-retrieve = 100 -> 0.4502
+> RRF on no-retrieve -> 0.4772, 0.3413, 0.2450
+> RRF on no-retrieve = 1000 -> 0.4768 , 0.3401, 0.2444
+> RRF on no-retrieve = 500 -> 0.4757, 0.3375, 0.2439
+> RRF on no-retrieve = 100 -> 0.4502, 0.3194, 0.2304
+
+> Bordacount apprach 2 -> for each query, find out all the documents ranking mechanism has ordered -> give points -> add points -> rank -> score = 0.3981, 0.2911, 0.2250
+> Using total_ret - rank = 0.4773, 0.3454, 0.2457
+> Without considering non-retrieved = 0.2416, 0.1497, 0.1589
+
+> Condorcet with -> 0.4786, 0.3449, 0.2485
+> Condorcet ignoring non-retrieved -> 0.3942, 0.2888, 0.2249
