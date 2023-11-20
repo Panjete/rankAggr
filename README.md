@@ -18,6 +18,9 @@
 
 [3] Mark H. Montague and Javed A. Aslam. Condorcet fusion for improved retrieval. In International Con- ference on Information and Knowledge Management, 2002. URL: https://api.semanticscholar.org/CorpusID:5201014.
 
+![letor](https://github.com/Panjete/rankAggr/assets/103451209/863fc4b5-dbcd-43bd-a285-246dd8a36c85)
+
+
 ## RESULTS 
 
 As map, p@5 and p@10 values, 
@@ -46,7 +49,5 @@ As map, p@5 and p@10 values,
 
 * Variants of Bordafuse maps -> 0.4855, 0.4835
 * Final optimisations of Bordafuse -> 0.4862, 0.3485, 0.2489
-
-
 
 
